@@ -4,6 +4,7 @@ import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { usePos } from '@/context/PosContext';
 import { LoginPage } from '@/components/auth/LoginPage';
+import { LoginRevealAnimation } from '@/components/auth/LoginRevealAnimation';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { TopHeader } from '@/components/layout/TopHeader';
 import { DashboardView } from '@/components/dashboard/DashboardView';
@@ -19,7 +20,7 @@ import { ProfileView } from '@/components/profile/ProfileView';
 import { SettingsView } from '@/components/settings/SettingsView';
 
 export default function Home() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, showRevealSplash, setShowRevealSplash } = useAuth();
   const { activeTab } = usePos();
 
   // If user is not logged in, render the Landing & Login Page
@@ -59,7 +60,12 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F4F7F6] text-slate-900 font-sans">
+    <div className="flex min-h-screen bg-[#F4F7F6] text-slate-900 font-sans relative">
+      {/* 3D Shoe Break Reveal Animation Overlay */}
+      {showRevealSplash && (
+        <LoginRevealAnimation onComplete={() => setShowRevealSplash(false)} />
+      )}
+
       {/* Left Navigation Sidebar */}
       <Sidebar />
 

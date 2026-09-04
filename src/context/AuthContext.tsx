@@ -7,6 +7,8 @@ import { DEMO_USERS } from '@/data/users';
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
+  showRevealSplash: boolean;
+  setShowRevealSplash: (show: boolean) => void;
   login: (userOrRole?: User | string) => void;
   logout: () => void;
 }
@@ -15,6 +17,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [showRevealSplash, setShowRevealSplash] = useState<boolean>(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('pos_user_session');
@@ -39,11 +42,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     setUser(selectedUser);
+    setShowRevealSplash(true);
     localStorage.setItem('pos_user_session', JSON.stringify(selectedUser));
   };
 
   const logout = () => {
     setUser(null);
+    setShowRevealSplash(false);
     localStorage.removeItem('pos_user_session');
   };
 
@@ -52,6 +57,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         user,
         isAuthenticated: !!user,
+        showRevealSplash,
+        setShowRevealSplash,
         login,
         logout,
       }}
